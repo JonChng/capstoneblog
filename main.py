@@ -10,7 +10,7 @@ from forms import CreatePostForm
 from flask_gravatar import Gravatar
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Email, Length, email_validator
+from wtforms.validators import DataRequired, Email, Length
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
@@ -38,7 +38,7 @@ class BlogPost(db.Model):
 db.create_all()
 
 class RegisterForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email(message="Invalid email")])
+    email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password',
                              validators=[DataRequired(), Length(min=8, message="Password must be 8 characters long.")])
     name = StringField("Name", validators=[DataRequired()])
@@ -55,7 +55,8 @@ def get_all_posts():
 
 @app.route('/register')
 def register():
-    return render_template("register.html")
+    form = RegisterForm()
+    return render_template("register.html", form=form)
 
 
 @app.route('/login')
@@ -133,4 +134,4 @@ def delete_post(post_id):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8000)
